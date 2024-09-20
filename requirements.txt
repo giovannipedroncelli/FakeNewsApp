@@ -77,7 +77,6 @@ pymdown-extensions==10.9
 pyparsing==3.1.4
 python-dateutil==2.9.0.post0
 pytz==2024.1
-pywin32
 PyYAML==6.0.2
 pyzmq==26.2.0
 referencing==0.35.1
