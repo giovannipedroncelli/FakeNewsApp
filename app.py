@@ -76,10 +76,10 @@ def show_info():
     
     L'articolo di riferimento è disponibile [qui](https://link.springer.com/article/10.3758/s13428-023-02124-2).         
     
-    In questo test ti verrà chiesto di **classificare 20 notizie come vere o false** e di rispondere ad alcune domande facoltative sul tuo background. Al termine del test potrai ricevere 3 diversi punteggi relativi alla tua capacità di:
-    * **distinguere i titoli veri da quelli del falsi** (da 0% a 100%)
-    * **riconoscere le notizie autentiche** (da 0% a 100%)
-    * **riconoscere le notizie false** (da 0% a 100%)
+    In questo test ti verrà chiesto di **classificare 20 notizie come vere o false**. Al termine del test riceverai 4 diversi punteggi:
+    * capacità di **distinguere i titoli veri da quelli del falsi** (da 0% a 100%)
+    * capacità di **riconoscere le notizie autentiche** (da 0% a 100%)
+    * capacità di **riconoscere le notizie false** (da 0% a 100%)
     * **indice di scetticismo/creduloneria** (va da -10 a +10, da eccessivamente scettico a eccessivamente credulone)
     """)
     if st.button("Inizia il test"):
