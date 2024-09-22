@@ -68,7 +68,7 @@ st.markdown("""
 
 # Funzione per mostrare la schermata delle informazioni
 def show_info():
-    st.title("Benvenuto al test di predisposizione alla disinformazione")
+    st.title("Benvenuto al test di classificazione delle fake news")
     st.markdown("""
     ### Informazioni sul test
 
