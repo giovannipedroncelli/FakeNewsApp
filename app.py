@@ -68,7 +68,7 @@ st.markdown("""
 
 # Funzione per mostrare la schermata delle informazioni
 def show_info():
-    st.title("Benvenuto al test di classificazione delle fake news")
+    st.title("Benvenuto/a al test di classificazione delle fake news")
     st.markdown("""
     ### Informazioni sul test
 
@@ -147,7 +147,7 @@ def show_results():
     <br>
     - **Fake News Detection**: {fake_news_detection}% (abilità di identificare correttamente le notizie false)
     <br>
-    - **Distrust/Naïvité**: {distrust_naivety} (da -10 a +10, troppo scettico o troppo ingenuo)
+    - **Distrust/Naïvité**: {distrust_naivety} (da -10 (troppo scettico) a +10 (troppo ingenuo))
     <br>
     """, unsafe_allow_html=True)
 
@@ -157,9 +157,9 @@ def show_results():
     elif veracity_discernment >= 60:
         st.info("Hai una buona capacità di distinguere le notizie, ma potresti migliorare.")
     elif veracity_discernment < 60 and distrust_naivety < 0:
-        st.warning("Sembri essere un po' troppo scettico riguardo alle notizie.")
+        st.warning("Sembri essere un po' troppo scettico/a riguardo alle notizie.")
     else:
-        st.error("Potresti essere più attento nella distinzione tra notizie vere e false.")
+        st.error("Potresti essere più attento/a nella distinzione tra notizie vere e false.")
 
     # Aggiungi coriandoli
     rain(emoji="🎉")
