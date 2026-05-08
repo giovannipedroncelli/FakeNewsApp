@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.streamlit/
+.env
+mist_quiz.db
+mist_quiz.db-shm
+mist_quiz.db-wal
