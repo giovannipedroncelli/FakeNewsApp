@@ -28,7 +28,7 @@ from streamlit_extras.let_it_rain import rain
 # ═══════════════════════════════════════════════════════════════════
 PRESENTER_PASSWORD = "relatore2026"
 DB_PATH = "mist_quiz.db"
-N_Q = 20        # numero domande
+N_Q = 8        # numero domande
 POLL_SECS = 2   # secondi tra un auto-refresh e l'altro (partecipanti)
 
 # ═══════════════════════════════════════════════════════════════════
@@ -36,25 +36,13 @@ POLL_SECS = 2   # secondi tra un auto-refresh e l'altro (partecipanti)
 # ═══════════════════════════════════════════════════════════════════
 NOTIZIE: list[tuple[str, bool]] = [
     ("I funzionari governativi hanno manipolato i prezzi delle azioni per nascondere scandali.", False),
-    ("I media aziendali sono controllati dal complesso militare-industriale: le principali compagnie petrolifere possiedono i media e ne controllano l'agenda.", False),
     ("Nuovo studio: le persone di sinistra mentono più facilmente per ottenere uno stipendio più alto.", False),
-    ("Il governo sta manipolando la percezione pubblica dell'ingegneria genetica per rendere le persone più inclini ad accettare tali tecniche.", False),
-    ("L'estremismo di sinistra causa più danni al mondo del terrorismo, afferma un rapporto dell'ONU.", False),
     ("Alcuni vaccini sono carichi di sostanze chimiche e tossine pericolose.", False),
-    ("Nuovo studio: chiara relazione tra colore degli occhi e intelligenza.", False),
     ("Il governo sta diffondendo consapevolmente malattie attraverso le onde radio e gli alimenti.", False),
-    ("Il virus Ebola è stato causato dai test nucleari degli Stati Uniti, afferma un nuovo studio.", False),
-    ("I funzionari governativi hanno illegalmente manipolato il clima per causare tempeste devastanti.", False),
     ("Gli atteggiamenti verso l'UE sono ampiamente positivi, sia all'interno che all'esterno dell'Europa.", True),
-    ("Una persona su tre nel mondo non ha fiducia nelle ONG.", True),
-    ("Riflettendo il cambiamento demografico, 109 contee statunitensi sono diventate a maggioranza non-bianca dal 2000.", True),
-    ("Esperti di relazioni internazionali e pubblico statunitense concordano: l'America è meno rispettata a livello globale.", True),
     ("Hyatt rimuoverà le bottigliette dai bagni degli hotel entro il 2021.", True),
-    ("Il re del Marocco nomina il capo del comitato per combattere povertà e disuguaglianza.", True),
     ("I repubblicani sono divisi nelle opinioni sulla condotta di Trump, i democratici sono ampiamente critici.", True),
-    ("I democratici sono più favorevoli dei repubblicani alla spesa federale per la ricerca scientifica.", True),
-    ("Divario generazionale sul riscaldamento globale: i giovani americani sono i più preoccupati.", True),
-    ("Il sostegno degli Stati Uniti alla marijuana legale è stabile nell'ultimo anno.", True),
+    ("Divario generazionale sul riscaldamento globale: i giovani americani sono i più preoccupati.", True)
 ]
 assert len(NOTIZIE) == N_Q
 
