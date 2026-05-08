@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
-.streamlit/
+.streamlit/*
+!.streamlit/secrets.toml.example
 .env
 mist_quiz.db
 mist_quiz.db-shm

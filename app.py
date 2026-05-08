@@ -15,6 +15,7 @@ Deploy su Streamlit Community Cloud:
 """
 
 import json
+import os
 import random
 import sqlite3
 import time
@@ -24,9 +25,20 @@ import streamlit as st
 from streamlit_extras.let_it_rain import rain
 
 # ═══════════════════════════════════════════════════════════════════
-#  CONFIG  ← cambia PRESENTER_PASSWORD prima del deploy!
+#  CONFIG  ← imposta PRESENTER_PASSWORD nei secrets prima del deploy!
 # ═══════════════════════════════════════════════════════════════════
-PRESENTER_PASSWORD = "relatore2026"
+
+
+def _load_presenter_password() -> str:
+    if "PRESENTER_PASSWORD" in st.secrets:
+        return str(st.secrets["PRESENTER_PASSWORD"])
+    env_password = os.getenv("PRESENTER_PASSWORD")
+    if env_password:
+        return env_password
+    return "CHANGE_ME"
+
+
+PRESENTER_PASSWORD = _load_presenter_password()
 DB_PATH = "mist_quiz.db"
 N_Q = 8        # numero domande
 POLL_SECS = 2   # secondi tra un auto-refresh e l'altro (partecipanti)
@@ -261,6 +273,14 @@ with st.sidebar:
 
 def _presenter():
     # ── autenticazione ─────────────────────────────────────────
+    if PRESENTER_PASSWORD == "CHANGE_ME":
+        st.title("🎙️ Accesso relatore")
+        st.error(
+            "Password relatore non configurata. Imposta PRESENTER_PASSWORD in "
+            "Streamlit Secrets o come variabile ambiente."
+        )
+        return
+
     if not st.session_state.get("auth"):
         st.title("🎙️ Accesso relatore")
         pwd = st.text_input("Password", type="password")
