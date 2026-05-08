@@ -7,7 +7,7 @@ App Streamlit per quiz live MIST con ruolo Relatore e Partecipante.
 1. Installa dipendenze:
    pip install -r requirements.txt
 2. Avvia:
-   streamlit run fakenewsapp.py
+   streamlit run app.py
 
 ## Deploy su Streamlit Community Cloud
 
@@ -16,8 +16,6 @@ App Streamlit per quiz live MIST con ruolo Relatore e Partecipante.
 3. Apri https://share.streamlit.io e collega il repository.
 4. Main file path: app.py
 5. Python version: 3.11 (consigliata)
-
-Nota: `fakenewsapp.py` e un alias di compatibilita che importa `app.py`.
 
 ## Password relatore (segreti)
 

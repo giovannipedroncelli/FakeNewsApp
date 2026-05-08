@@ -7,11 +7,11 @@ Ruoli:
 
 Avvio locale:
   pip install streamlit streamlit-extras pandas
-  streamlit run fakenewsapp.py
+    streamlit run app.py
 
 Deploy su Streamlit Community Cloud:
-  Rinomina requirements-fakenewsapp.txt → requirements.txt nel repository GitHub,
-  poi collega il repository su https://share.streamlit.io
+    Usa questo repository GitHub con main file path app.py
+    su https://share.streamlit.io
 """
 
 import json
