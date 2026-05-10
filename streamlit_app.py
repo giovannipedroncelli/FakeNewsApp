@@ -22,7 +22,6 @@ import time
 
 import pandas as pd
 import streamlit as st
-from streamlit_extras.let_it_rain import rain
 
 # ═══════════════════════════════════════════════════════════════════
 #  CONFIG  ← imposta PRESENTER_PASSWORD nei secrets prima del deploy!
@@ -203,6 +202,7 @@ def _mist(resp: dict, order: list) -> dict:
 
     return {
         "V": V, "r": r, "f": f, "d": d, "n": n,
+        "n_real": n_real, "n_fake": n_fake,
         "V_pct": round(V / N_Q * 100, 1),
         "r_pct": round(r / n_real * 100, 1) if n_real else 0.0,
         "f_pct": round(f / n_fake * 100, 1) if n_fake else 0.0,
@@ -401,37 +401,77 @@ def _presenter():
 
     # ── FINISHED ───────────────────────────────────────────────
     elif phase == "finished":
-        st.title("🏁 Risultati finali del gruppo")
-        rain(emoji="🎉")
+        st.title("📊 Risultati del gruppo")
 
         all_scores = []
         for p in _participants():
             resp = _resps_p(p["id"])
             s = _mist(resp, order)
-            all_scores.append({"Nome": p["name"], **s})
+            all_scores.append(s)
 
         if all_scores:
             def _avg(key):
                 return round(sum(sc[key] for sc in all_scores) / len(all_scores), 1)
 
-            st.subheader("📊 Media del gruppo")
+            n_real_q = all_scores[0]["n_real"]
+            n_fake_q = all_scores[0]["n_fake"]
+            n_pts_fin = len(all_scores)
+
+            st.markdown(f"Risultati aggregati di **{n_pts_fin} partecipanti**.")
+            st.divider()
+
+            st.subheader("Accuratezza complessiva")
             m1, m2, m3 = st.columns(3)
-            m1.metric("Veracity Discernment (V)", f"{_avg('V_pct')}%")
-            m2.metric("Real News Detection (r)", f"{_avg('r_pct')}%")
-            m3.metric("Fake News Detection (f)", f"{_avg('f_pct')}%")
-            m4, m5, _ = st.columns(3)
-            m4.metric("Distrust (d)", _avg("d"),
-                      help="Media: tendenza a giudicare in eccesso come fake (0–10)")
-            m5.metric("Naivite (n)", _avg("n"),
-                      help="Media: tendenza a giudicare in eccesso come reale (0–10)")
+            m1.metric(
+                "Veracity Discernment (V)",
+                f"{_avg('V_pct')}%",
+                help=(
+                    "Percentuale di risposte corrette su tutte le notizie. "
+                    f"Punteggio grezzo su {N_Q} domande."
+                ),
+            )
+            m2.metric(
+                "Real News Detection (r)",
+                f"{_avg('r_pct')}%",
+                help=(
+                    f"Percentuale di notizie REALI identificate correttamente "
+                    f"(su {n_real_q} notizie reali nel quiz)."
+                ),
+            )
+            m3.metric(
+                "Fake News Detection (f)",
+                f"{_avg('f_pct')}%",
+                help=(
+                    f"Percentuale di notizie FALSE identificate correttamente "
+                    f"(su {n_fake_q} fake news nel quiz)."
+                ),
+            )
 
             st.divider()
-            st.subheader("🏆 Classifica partecipanti")
-            df = pd.DataFrame(all_scores)[["Nome", "V_pct", "r_pct", "f_pct", "d", "n"]]
-            df.columns = ["Nome", "V %", "r %", "f %", "d", "n"]
-            df = df.sort_values("V %", ascending=False).reset_index(drop=True)
-            df.index += 1
-            st.dataframe(df, use_container_width=True)
+            st.subheader("Bias di risposta")
+            st.caption(
+                "I due indici di bias sono **mutualmente esclusivi**: "
+                "se uno è > 0, l'altro è necessariamente 0."
+            )
+            m4, m5, _ = st.columns(3)
+            m4.metric(
+                "Distrust (d)",
+                f"{_avg('d')} / {n_fake_q}",
+                help=(
+                    "Bias di scetticismo eccessivo: quante volte in media il gruppo "
+                    "ha detto 'Fake' più del necessario. "
+                    f"Scala 0–{n_fake_q} (0 = nessun bias)."
+                ),
+            )
+            m5.metric(
+                "Naivité (n)",
+                f"{_avg('n')} / {n_real_q}",
+                help=(
+                    "Bias di credulità eccessiva: quante volte in media il gruppo "
+                    "ha detto 'Reale' più del necessario. "
+                    f"Scala 0–{n_real_q} (0 = nessun bias)."
+                ),
+            )
 
             with st.expander("📋 Distribuzione risposte per domanda"):
                 rows = []
@@ -560,24 +600,46 @@ def _participant():
     # ── FINISHED ───────────────────────────────────────────────
     elif phase == "finished":
         st.title(f"🏁 Quiz terminato, {pname}!")
-        rain(emoji="🎉")
 
         resp = _resps_p(pid)
         s    = _mist(resp, order)
+        n_real_q = s["n_real"]
+        n_fake_q = s["n_fake"]
 
         st.subheader("I tuoi risultati")
         m1, m2, m3 = st.columns(3)
-        m1.metric("Veracity Discernment (V)", f"{s['V_pct']}%",
-                  help=f"{s['V']}/{N_Q} risposte corrette")
-        m2.metric("Real News Detection (r)", f"{s['r_pct']}%",
-                  help=f"{s['r']}/10 notizie reali identificate")
-        m3.metric("Fake News Detection (f)", f"{s['f_pct']}%",
-                  help=f"{s['f']}/10 fake news identificate")
+        m1.metric(
+            "Veracity Discernment (V)",
+            f"{s['V_pct']}%",
+            help=f"{s['V']}/{N_Q} risposte corrette in totale.",
+        )
+        m2.metric(
+            "Real News Detection (r)",
+            f"{s['r_pct']}%",
+            help=f"{s['r']}/{n_real_q} notizie reali identificate correttamente.",
+        )
+        m3.metric(
+            "Fake News Detection (f)",
+            f"{s['f_pct']}%",
+            help=f"{s['f']}/{n_fake_q} fake news identificate correttamente.",
+        )
         m4, m5, _ = st.columns(3)
-        m4.metric("Distrust (d)", s["d"],
-                  help="Quante volte hai detto 'Fake' in eccesso (0 = nessun bias, 10 = massimo)")
-        m5.metric("Naivite (n)", s["n"],
-                  help="Quante volte hai detto 'Reale' in eccesso (0 = nessun bias, 10 = massimo)")
+        m4.metric(
+            "Distrust (d)",
+            f"{s['d']} / {n_fake_q}",
+            help=(
+                f"Quante volte hai detto 'Fake' in eccesso rispetto alle fake presenti. "
+                f"Scala 0–{n_fake_q} (0 = nessun bias di scetticismo)."
+            ),
+        )
+        m5.metric(
+            "Naivité (n)",
+            f"{s['n']} / {n_real_q}",
+            help=(
+                f"Quante volte hai detto 'Reale' in eccesso rispetto alle notizie vere presenti. "
+                f"Scala 0–{n_real_q} (0 = nessun bias di credulità)."
+            ),
+        )
 
         st.caption(
             "Punteggi calcolati secondo il framework MIST *Verification done* "
