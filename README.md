@@ -1,34 +1,37 @@
-# MIST Webinar Quiz
+# MIST – Fake News Quiz (Versione Asincrona)
 
-App Streamlit per quiz live MIST con ruolo Relatore e Partecipante.
+Quiz individuale per autovalutazione sulla resistenza alla disinformazione.
+Basato sul framework **MIST** (Maertens et al., 2024).
 
 ## Avvio locale
 
-1. Installa dipendenze:
-   pip install -r requirements.txt
-2. Avvia:
-   streamlit run app.py
+```bash
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+La app si apre su `http://localhost:8501`.
 
 ## Deploy su Streamlit Community Cloud
 
-1. Crea un nuovo repository GitHub.
-2. Carica i file di questa cartella.
-3. Apri https://share.streamlit.io e collega il repository.
-4. Main file path: app.py
-5. Python version: 3.11 (consigliata)
+1. Carica il repository GitHub.
+2. Vai a https://share.streamlit.io e collega il repository.
+3. Main file path: `app.py`
+4. Python version: 3.11 (consigliata)
 
-## Password relatore (segreti)
+L'app sarà disponibile come link pubblico da condividere con gli utenti.
 
-Non salvare la password nel codice.
+## Utilizzo
 
-1. Locale: crea `.streamlit/secrets.toml` partendo da `.streamlit/secrets.toml.example`.
-2. Streamlit Cloud: App -> Settings -> Secrets e inserisci:
+1. L'utente inserisce il proprio nome
+2. Risponde a 8 domande su notizie vere e false (5 secondi a domanda)
+3. Vede i propri punteggi MIST e un'interpretazione personale
+4. Può rivedere tutte le risposte in una tabella riepilogativa
 
-   `PRESENTER_PASSWORD = "la-tua-password-forte"`
+Nessun database, nessun salvataggio: ogni sessione è indipendente.
 
-L'app legge prima `st.secrets["PRESENTER_PASSWORD"]`, poi la variabile ambiente `PRESENTER_PASSWORD`.
+## Architettura
 
-## Nota persistenza
-
-Il database SQLite (mist_quiz.db) e locale all'istanza. Se l'app si riavvia, la sessione quiz si azzera.
-Per webinar ad alta affidabilita, valuta un database remoto (Postgres/Supabase).
+- **Frontend**: Streamlit + `st.session_state` per memorizzare le risposte
+- **Scoring**: Calcolo MIST-8 locale (Veracity Discernment, Real News Detection, Fake News Detection, Distrust, Naivité)
+- **Deploy**: Stateless (ogni utente vede una sessione isolata)
